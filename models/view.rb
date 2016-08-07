@@ -5,15 +5,6 @@ require_relative('match.rb')
 require_relative('team.rb')
 require_relative('league.rb')
 
-options = {
-  'teams' => Team.all,
-  'matches' => Match.all
-}
-
-league1 = League.new(options)
-
-binding.pry
-
 class View
 
   def initialize(options)
@@ -26,9 +17,17 @@ class View
       puts "#{team.id}: | #{team.name}"
     end
   end
-
-
 end
+
+options = {
+  'teams' => Team.all,
+  'matches' => Match.all
+}
+
+league1 = League.new(options)
+
+binding.pry
+
 display = View.new({:league => league1})
 
 
