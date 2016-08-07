@@ -55,6 +55,8 @@ while true
   q: Quit"
   choice = gets.chomp.downcase
   puts "\n"
+  finished = false
+  finished = true if display.league.remaining_matches == []
 
   case choice
   when 'a'
@@ -70,12 +72,22 @@ while true
     puts "\nPress enter to go back to menu"
     gets
   when 'd'
-    display.list_remaining_lineup
-    puts "\nPress enter to go back to menu"
-    gets
+    if finished  == true
+      puts "League is finished\nPress enter to go back to menu"
+      gets
+    else
+      display.list_remaining_lineup
+      puts "\nPress enter to go back to menu"
+      gets
+    end
   when 'e'
-    match = display.match_generator
-    display.league.play_match(match)
+    if finished  == true
+      puts "League is finished\nPress enter to go back to menu"
+      gets
+    else
+      match = display.match_generator
+      display.league.play_match(match)
+    end
   when 'q'
     break
   end

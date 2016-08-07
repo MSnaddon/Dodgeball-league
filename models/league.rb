@@ -3,7 +3,7 @@ require_relative('match.rb')
 
 
 class League
-attr_reader :teams, :standings, :matches, :remaining_matches
+attr_reader :teams, :standings, :matches, :remaining_matches, :complete
 
   def initialize(options)
     @teams = options['teams'] #array of hashes (name, id)
@@ -18,6 +18,7 @@ attr_reader :teams, :standings, :matches, :remaining_matches
     }}
     generate_lineup
     sync_matches
+    @complete = false
   end
 
   def get_team_standings_index(id)
@@ -48,10 +49,12 @@ attr_reader :teams, :standings, :matches, :remaining_matches
     away[:matches] += 1
     order_standings()
     remove_played_match(match)
+    @complete = true if @remaining_matches == []
   end
 
   def sync_matches
     @matches.each {|match| update_standings(match)}
+    @complete = true if @remaining_matches == []
   end
 
   def order_standings

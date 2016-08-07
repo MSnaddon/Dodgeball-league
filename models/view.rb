@@ -7,6 +7,7 @@ class View
   end
 
   def list_league_teams
+    puts "Teams in league"
     puts "id | team"
     @league.teams.each do |team|
       puts " #{team.id} | #{team.name}"
@@ -15,10 +16,10 @@ class View
   end
 
   def list_standings
-    puts " W | D | L | SD | Team\n\n"
+    puts "M | W | D | L | SD | Team\n\n"
     @league.standings.each do |s| #s = standing of loop
       losses = s[:matches]-s[:wins]-s[:draws]
-      puts " #{s[:wins]} | #{s[:draws]} | #{losses} |  #{s[:score_difference]} | #{s[:team]}"
+      puts "#{s[:matches]} | #{s[:wins]} | #{s[:draws]} | #{losses} |  #{s[:score_difference]} | #{s[:team]}"
     end
   end
 
@@ -43,12 +44,17 @@ class View
   end
 
   def match_generator
-    list_league_teams
     list_remaining_lineup
-    print "Select ID of home team: "
-    home_id = gets.to_i
-    print "Select ID of away team: "
-    away_id = gets.to_i
+    puts ""
+    list_league_teams
+    while true
+      print "Select ID of home team: "
+      home_id = gets.to_i
+      print "Select ID of away team: "
+      away_id = gets.to_i
+      break if @league.remaining_matches.include?([home_id,away_id]) || @league.remaining_matches.include?([away_id,home_id])
+      puts "Invalid teams or match has already been played"
+    end
     print "Input home score: "
     home_score = gets.to_i
     print "Input away score: "
