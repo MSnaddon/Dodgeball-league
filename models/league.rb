@@ -1,4 +1,6 @@
 require ('pry-byebug')
+require_relative('match.rb')
+
 
 class League
 attr_reader :teams, :standings, :matches, :remaining_matches
@@ -14,8 +16,8 @@ attr_reader :teams, :standings, :matches, :remaining_matches
       draws: 0,
       score_difference: 0
     }}
-    sync_matches
     generate_lineup
+    sync_matches
   end
 
   def get_team_standings_index(id)
@@ -45,6 +47,7 @@ attr_reader :teams, :standings, :matches, :remaining_matches
     home[:matches] += 1
     away[:matches] += 1
     order_standings()
+    remove_played_match(match)
   end
 
   def sync_matches
@@ -55,22 +58,23 @@ attr_reader :teams, :standings, :matches, :remaining_matches
     @standings = @standings.sort_by {|standing| [standing[:wins], standing[:score_difference]]}.reverse
   end
 
-  def play_match(new_match) #takes in match object
+  def play_match(match_hash) #takes in match object
+    new_match = Match.new(match_hash)
     new_match.save
     update_standings(new_match)
   end
 
   def generate_lineup
-    @remaining_matches = @teams.map{|team| team.id}.combination(2).to_a
+    lineup = @teams.map{|team| team.id}.combination(2).to_a
+    @remaining_matches ||= lineup
+    return lineup
   end
 
-  def remove_played_matches
-    @matches.each do |match|
-      home_id = match.home_team_id
-      away_id = match.away_team_id
-      pairing = [home_id, away_id].sort!
-      @remaining_matches.delete_if{|game| game == pairing || game == pairing.reverse}
-    end
+  def remove_played_match(match) #from lineup
+    home_id = match.home_team_id
+    away_id = match.away_team_id
+    pairing = [home_id, away_id].sort!
+    @remaining_matches.delete_if{ |game| game == pairing || game == pairing.reverse}
   end
 
 end

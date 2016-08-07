@@ -17,6 +17,7 @@ INSERT INTO teams (name) VALUES ('Duck');
 INSERT INTO teams (name) VALUES ('Dive');
 INSERT INTO teams (name) VALUES ('Dodge');
 INSERT INTO teams (name) VALUES ('Dip');
+INSERT INTO teams (name) VALUES ('Doge');
 
 INSERT INTO matches (home_team_id, away_team_id, home_team_score, away_team_score) VALUES (1,2,0,2);
 INSERT INTO matches (home_team_id, away_team_id, home_team_score, away_team_score) VALUES (1,3,4,4);
